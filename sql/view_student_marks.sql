@@ -13,3 +13,5 @@ JOIN exam_results er ON s.student_id = er.student_id
 JOIN subjects sub ON er.subject_id = sub.subject_id;
 
 REFRESH MATERIALIZED VIEW student_marks_mv;
+
+SELECT * FROM student_marks_mv;
