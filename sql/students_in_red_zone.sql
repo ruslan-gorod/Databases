@@ -6,8 +6,7 @@ BEGIN
     FROM students s
     JOIN exam_results er ON s.student_id = er.student_id
     WHERE er.mark <= 3
-    GROUP BY s.student_id
-    HAVING COUNT(CASE WHEN er.mark <= 3 THEN 1 END) >= 2
+    GROUP BY s.student_id, er.mark
   );
 END;
 $$ LANGUAGE plpgsql;
