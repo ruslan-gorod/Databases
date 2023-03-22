@@ -1,0 +1,41 @@
+Outer join
+
+"Sort  (cost=234.78..234.79 rows=1 width=39)"
+"  Sort Key: s.updated_datetime"
+"  ->  Hash Right Join  (cost=44.50..234.77 rows=1 width=39)"
+"        Hash Cond: (er.student_id = s.id)"
+"        Filter: (er.id IS NULL)"
+"        ->  Seq Scan on exam_result er  (cost=0.00..180.00 rows=3896 width=8)"
+"              Filter: (mark >= 7)"
+"        ->  Hash  (cost=32.00..32.00 rows=1000 width=39)"
+"              ->  Seq Scan on student s  (cost=0.00..32.00 rows=1000 width=39)"
+
+
+
+Subquery with ‘not in’ clause
+
+"Sort  (cost=246.65..247.90 rows=500 width=28)"
+"  Sort Key: student.updated_datetime"
+"  ->  Seq Scan on student  (cost=189.74..224.24 rows=500 width=28)"
+"        Filter: (NOT (hashed SubPlan 1))"
+"        SubPlan 1"
+"          ->  Seq Scan on exam_result  (cost=0.00..180.00 rows=3896 width=4)"
+"                Filter: (mark >= 7)"
+
+
+
+Subquery with ‘any ‘ clause
+
+"Sort  (cost=313.84..315.09 rows=500 width=28)"
+"  Sort Key: student.updated_datetime"
+"  ->  Seq Scan on student  (cost=256.92..291.42 rows=500 width=28)"
+"        Filter: (NOT (hashed SubPlan 1))"
+"        SubPlan 1"
+"          ->  HashAggregate  (cost=244.51..254.44 rows=993 width=4)"
+"                Group Key: exam_result.student_id"
+"                ->  Hash Join  (cost=44.50..234.77 rows=3896 width=4)"
+"                      Hash Cond: (exam_result.student_id = student_1.id)"
+"                      ->  Seq Scan on exam_result  (cost=0.00..180.00 rows=3896 width=4)"
+"                            Filter: (mark >= 7)"
+"                      ->  Hash  (cost=32.00..32.00 rows=1000 width=4)"
+"                            ->  Seq Scan on student student_1  (cost=0.00..32.00 rows=1000 width=4)"
